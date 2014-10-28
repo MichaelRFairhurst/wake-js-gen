@@ -1,0 +1,70 @@
+import WakeClass;
+import WakeProperty;
+import LinkableOutput;
+import WakeType;
+import WakeLambdaType;
+import Map;
+import NativeJsGenerationConfig;
+
+every NativeJsGenerator is:
+
+	needs NativeJsGenerationConfig;
+
+	provides Exception;
+
+	createNative(WakeClass)WrapperTo(LinkableOutput file) {
+		file.write('function ')
+			.writeClassUsage(WakeClass.classname)
+			.write('(');
+
+		if(NativeJsGenerationConfig.useArg){
+			file.write('a');
+		}
+
+		file.write('){');
+
+		if(!NativeJsGenerationConfig.useArg){
+			file.write('var a=');
+
+			if(NativeJsGenerationConfig.useCtor) {
+				file.write('new ' + WakeClass.classname + '()');
+			} else {
+				file.write(NativeJsGenerationConfig.wrappedExpression);
+			}
+			file.write(';');
+		}
+
+		foreach(WakeClass.properties.getKeys()) {
+			var WakeProperty? = WakeClass.properties.get(Text);
+			if WakeProperty exists {
+				var WakeType? = WakeProperty.WakeType;
+
+				if WakeType exists {
+					var WakeLambdaType? = WakeType.WakeLambdaType;
+
+					if WakeLambdaType exists {
+
+						var Text nativeName = WakeProperty.casing[0];
+
+						var Num? placement = nativeName.indexOf('(');
+						if placement exists {
+							nativeName = nativeName.substr(0, placement);
+						}
+
+						file.write('this.')
+							.writePropertyUsage(WakeProperty.name)
+							.write('=function ')
+							.writePropertyUsage(WakeProperty.name)
+							.write('(){return a.' + nativeName)
+							.write('.apply(a, arguments)')
+							.write('};');
+
+					} else {
+						throw Exception from this;
+					}
+				}
+			}
+		}
+
+		file.write("}");
+	}

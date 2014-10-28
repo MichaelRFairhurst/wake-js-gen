@@ -1,0 +1,47 @@
+import File;
+import Map;
+
+every LinkableOutput is:
+
+	needs Map{Num, Text} classusages, Map{Num, Text} propertyusages;
+
+	with Text buffer = "";
+	with Num offset = 0;
+
+	LinkableOutput -- write(Text) {
+		offset += Text.getSize();
+		buffer += Text;
+		return this;
+	}
+
+	LinkableOutput -- writeClassUsage(Text) {
+		classusages.put(offset, Text);
+		return this;
+	}
+
+	LinkableOutput -- writePropertyUsage(Text) {
+		propertyusages.put(offset, Text);
+		return this;
+	}
+
+	LinkableOutput -- flushTo(File) {
+		File.write("%-CLASSES-% ");
+		foreach(classusages.getKeys()) {
+			var Text? = classusages.get(Num);
+			if Text exists {
+				File.write(Num.toString() + " %" + Text + "% ");
+			}
+		}
+
+		File.write("%-PROPERTIES-% ");
+		foreach(propertyusages.getKeys()) {
+			var Text? = propertyusages.get(Num);
+			if Text exists {
+				File.write(Num.toString() + " %" + Text + "% ");
+			}
+		}
+
+		File.write("%-END-%\n");
+		File.write(buffer);
+		return this;
+	}

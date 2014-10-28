@@ -1,0 +1,44 @@
+import Argv;
+import TableFileReader;
+import UndefinedIndexException;
+import Printer;
+import FileSystem;
+import WakeClass;
+import NativeJsGenerator;
+import File;
+import LinkableOutput;
+import NativeJsGenerationConfig;
+import Console;
+
+every Main is:
+
+	needs Argv, TableFileReader, FileSystem, Printer, NativeJsGenerationConfig, LinkableOutput, Console;
+
+	provides NativeJsGenerator <- NativeJsGenerator(?NativeJsGenerationConfig);
+
+	main() {
+		Console.log('test!');
+		try {
+			var Text tabledir = Argv.getArgv()[2];
+			var Text classname = Argv.getArgv()[3];
+			var Text outputfilename = Argv.getArgv()[4];
+			var Text usageflag = Argv.getArgv()[5];
+
+			if(usageflag == 'arg') {
+				NativeJsGenerationConfig.useArg = true;
+			} else if(usageflag == 'ctor') {
+				NativeJsGenerationConfig.useCtor = true;
+			} else {
+				NativeJsGenerationConfig.wrappedExpression = usageflag;
+			}
+
+			var File from FileSystem.getPath(tabledir + '/' + classname + '.table');
+			var output File from FileSystem.getPath(outputfilename);
+			var WakeClass = TableFileReader.readFrom(File);
+			var NativeJsGenerator(NativeJsGenerationConfig) from this;
+			NativeJsGenerator.createNative(WakeClass)WrapperTo(LinkableOutput);
+			LinkableOutput.flushTo(output);
+		} catch(UndefinedIndexException) {
+			Printer.printLine("Usage: wake-js-gen tabledir classname outputfilename");
+		}
+	}
