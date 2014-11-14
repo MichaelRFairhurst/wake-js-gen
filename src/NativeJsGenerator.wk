@@ -4,35 +4,34 @@ import LinkableOutput;
 import WakeType;
 import WakeLambdaType;
 import Map;
-import NativeJsGenerationConfig;
+import Annotation;
+import AnnotationVal;
 
 every NativeJsGenerator is:
-
-	needs NativeJsGenerationConfig;
 
 	provides Exception;
 
 	createNative(WakeClass)WrapperTo(LinkableOutput file) {
+		var Bool isJsWrapper = false;
+		var Text? jsSingletonName = nothing;
+
+		foreach(WakeClass.Annotation[]) {
+			if(Annotation.name == "JavascriptWrapper") {
+				isJsWrapper = true;
+			} else if(Annotation.name == "JavascriptSingleton") {
+				jsSingletonName = Annotation.AnnotationVal[0].Text;
+			}
+		}
+
 		file.write('function ')
 			.writeClassUsage(WakeClass.classname)
 			.write('(');
 
-		if(NativeJsGenerationConfig.useArg){
+		if(isJsWrapper) {
 			file.write('a');
 		}
 
 		file.write('){');
-
-		if(!NativeJsGenerationConfig.useArg){
-			file.write('var a=');
-
-			if(NativeJsGenerationConfig.useCtor) {
-				file.write('new ' + WakeClass.classname + '()');
-			} else {
-				file.write(NativeJsGenerationConfig.wrappedExpression);
-			}
-			file.write(';');
-		}
 
 		foreach(WakeClass.properties.getKeys()) {
 			var WakeProperty? = WakeClass.properties.get(Text);
@@ -55,9 +54,29 @@ every NativeJsGenerator is:
 							.writePropertyUsage(WakeProperty.name)
 							.write('=function ')
 							.writePropertyUsage(WakeProperty.name)
-							.write('(){return a.' + nativeName)
-							.write('.apply(a, arguments)')
-							.write('};');
+							.write('(){');
+
+						var Text? customJs = nothing;
+
+						foreach(WakeProperty.Annotation[]) {
+							if(Annotation.name == "CustomJavascript") {
+								customJs = Annotation.AnnotationVal[0].Text;
+							}
+						}
+
+						if customJs exists {
+							file.write(customJs);
+						} else {
+							var Text subject = 'a';
+							if jsSingletonName exists {
+								subject = jsSingletonName;
+							}
+
+							file.write('return ' + subject + '.' + nativeName)
+								.write('.apply(' + subject + ',arguments)');
+						}
+
+						file.write('};');
 
 					} else {
 						throw Exception from this;

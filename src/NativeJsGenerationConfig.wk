@@ -1,5 +1,0 @@
-every NativeJsGenerationConfig is:
-
-	with public Text wrappedExpression = "";
-	with public Bool useCtor = false;
-	with public Bool useArg = false;
