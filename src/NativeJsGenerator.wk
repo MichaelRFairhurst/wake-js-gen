@@ -33,6 +33,15 @@ every NativeJsGenerator is:
 
 		file.write('){');
 
+		foreach(WakeClass.Annotation[]) {
+			if(Annotation.name == "JavascriptConstruct") {
+				var Text? ctor = Annotation.AnnotationVal[0].Text;
+				if ctor exists {
+					file.write(ctor);
+				}
+			}
+		}
+
 		foreach(WakeClass.properties.getKeys()) {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
