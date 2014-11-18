@@ -1,0 +1,54 @@
+import ExpressionSubstitutor;
+import Map;
+import Asserts;
+
+@TestClass
+every ExpressionSubstitutorTest is:
+
+	provides Map{Text, Text};
+	needs ExpressionSubstitutor;
+
+	@Test
+	testNoSubstitutionsNotSubstituted(Asserts) {
+		var Map{Text,Text} from this;
+
+		Asserts.that(ExpressionSubstitutor.substitute(Map)Within("testtesttest"))Equals("testtesttest");
+	}
+
+	@Test
+	testBadSubstitutionsThrows(Asserts) {
+		var Map{Text,Text} from this;
+
+		try {
+			ExpressionSubstitutor.substitute(Map)Within("test{{test}}test");
+		} catch(Exception) {
+			return;
+		}
+
+		Asserts.fail("no throw");
+	}
+
+	@Test
+	testSubstituteOneOptionWorks(Asserts) {
+		var Map{Text,Text} from this;
+		Map.put("test", "bloo");
+
+		Asserts.that(ExpressionSubstitutor.substitute(Map)Within("test{{test}}test"))Equals("testblootest");
+	}
+
+	@Test
+	testSubstituteTwoOptionsWorks(Asserts) {
+		var Map{Text,Text} from this;
+		Map.put("test", "bloo");
+		Map.put("bloo", "test");
+
+		Asserts.that(ExpressionSubstitutor.substitute(Map)Within("test{{test}}test{{bloo}}test"))Equals("testblootesttesttest");
+	}
+
+	@Test
+	testTwoSubstitutionsWorks(Asserts) {
+		var Map{Text,Text} from this;
+		Map.put("test", "bloo");
+
+		Asserts.that(ExpressionSubstitutor.substitute(Map)Within("test{{test}}test{{test}}test"))Equals("testblootestblootest");
+	}

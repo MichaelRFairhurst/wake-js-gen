@@ -11,9 +11,7 @@ import LinkableOutput;
 
 every Main is:
 
-	needs Argv, TableFileReader, FileSystem, Printer, LinkableOutput;
-
-	provides NativeJsGenerator;
+	needs Argv, TableFileReader, FileSystem, Printer, LinkableOutput, NativeJsGenerator;
 
 	main() {
 		try {
@@ -23,7 +21,6 @@ every Main is:
 			var File from FileSystem.getPath(tablefile);
 			var WakeClass = TableFileReader.readFrom(File);
 
-			var NativeJsGenerator from this;
 			NativeJsGenerator.createNative(WakeClass)WrapperTo(LinkableOutput);
 
 			var FilePath = FileSystem.getPath(outputfilename);

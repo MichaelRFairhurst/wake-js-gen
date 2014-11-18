@@ -1,0 +1,72 @@
+import WakeProperty;
+import LinkableOutput;
+import WakeLambdaType;
+import Annotation;
+import AnnotationVal;
+import ExpressionSubstitutor;
+import WakeType;
+import Map;
+
+every NativeMethodGenerator is:
+
+	needs ExpressionSubstitutor;
+
+	provides Exception, Map{Text, Text};
+
+	generate(WakeProperty)To(LinkableOutput file, Text? jsSingletonName) {
+		var WakeType? = WakeProperty.WakeType;
+
+		if WakeType exists {
+			var WakeLambdaType? = WakeType.WakeLambdaType;
+
+			if WakeLambdaType exists {
+
+				var Text nativeName = WakeProperty.casing[0];
+
+				var Num? placement = nativeName.indexOf('(');
+				if placement exists {
+					nativeName = nativeName.substr(0, placement);
+				}
+
+				file.write('this.')
+					.writePropertyUsage(WakeProperty.name)
+					.write('=function ')
+					.writePropertyUsage(WakeProperty.name)
+					.write('(');
+
+				var Map{Text, Text} varMap from this;
+				var Text[] varNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+				for(var Num = 0; Num < WakeLambdaType.arguments.getSize(); Num += 1) {
+					varMap.put(WakeLambdaType.arguments[Num].getAsVariableName(), varNames[Num]);
+				}
+
+				file.write(','.join(varMap.getValues()) + '){');
+
+				var Text? customJs = nothing;
+
+				foreach(WakeProperty.Annotation[]) {
+					if(Annotation.name == "CustomJavascript") {
+						customJs = Annotation.AnnotationVal[0].Text;
+					}
+				}
+
+				if customJs exists {
+					file.write(ExpressionSubstitutor.substitute(varMap)Within(customJs));
+				} else {
+					var Text subject = 'a';
+					if jsSingletonName exists {
+						subject = jsSingletonName;
+					}
+
+					file.write('return ' + subject + '.' + nativeName)
+						.write('.apply(' + subject + ',arguments)');
+				}
+
+				file.write('};');
+
+			} else {
+				throw Exception from this;
+			}
+		}
+	}

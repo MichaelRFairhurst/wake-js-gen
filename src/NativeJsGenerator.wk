@@ -6,10 +6,11 @@ import WakeLambdaType;
 import Map;
 import Annotation;
 import AnnotationVal;
+import NativeMethodGenerator;
 
 every NativeJsGenerator is:
 
-	provides Exception;
+	needs NativeMethodGenerator;
 
 	createNative(WakeClass)WrapperTo(LinkableOutput file) {
 		var Bool isJsWrapper = false;
@@ -45,52 +46,7 @@ every NativeJsGenerator is:
 		foreach(WakeClass.properties.getKeys()) {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
-				var WakeType? = WakeProperty.WakeType;
-
-				if WakeType exists {
-					var WakeLambdaType? = WakeType.WakeLambdaType;
-
-					if WakeLambdaType exists {
-
-						var Text nativeName = WakeProperty.casing[0];
-
-						var Num? placement = nativeName.indexOf('(');
-						if placement exists {
-							nativeName = nativeName.substr(0, placement);
-						}
-
-						file.write('this.')
-							.writePropertyUsage(WakeProperty.name)
-							.write('=function ')
-							.writePropertyUsage(WakeProperty.name)
-							.write('(){');
-
-						var Text? customJs = nothing;
-
-						foreach(WakeProperty.Annotation[]) {
-							if(Annotation.name == "CustomJavascript") {
-								customJs = Annotation.AnnotationVal[0].Text;
-							}
-						}
-
-						if customJs exists {
-							file.write(customJs);
-						} else {
-							var Text subject = 'a';
-							if jsSingletonName exists {
-								subject = jsSingletonName;
-							}
-
-							file.write('return ' + subject + '.' + nativeName)
-								.write('.apply(' + subject + ',arguments)');
-						}
-
-						file.write('};');
-
-					} else {
-						throw Exception from this;
-					}
-				}
+				NativeMethodGenerator.generate(WakeProperty)To(file, jsSingletonName);
 			}
 		}
 
