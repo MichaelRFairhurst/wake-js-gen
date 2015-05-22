@@ -1,20 +1,22 @@
-import Argv;
-import TableFileReader;
-import UndefinedIndexException;
-import Printer;
-import FileSystem;
-import WakeClass;
+import std.Argv;
+import treflect.TableFileReader;
+import std.UndefinedIndexException;
+import io.Printer;
+import io.FileSystem;
+import treflect.WakeClass;
 import NativeJsGenerator;
-import File;
-import FilePath;
+import io.File;
+import io.FilePath;
 import LinkableOutput;
+import Console;
 
 every Main is:
 
-	needs Argv, TableFileReader, FileSystem, Printer, LinkableOutput, NativeJsGenerator;
+	needs Argv, TableFileReader, FileSystem, Printer, LinkableOutput, NativeJsGenerator, Console;
 
 	main() {
 		try {
+			Console.log("test!");
 			var Text tablefile = Argv.getArgv()[2];
 			var Text outputfilename = Argv.getArgv()[3];
 

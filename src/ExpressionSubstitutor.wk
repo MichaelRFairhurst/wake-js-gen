@@ -1,6 +1,6 @@
-import WakeType;
-import Map;
-import Printer;
+import treflect.WakeType;
+import std.Map;
+import io.Printer;
 
 every ExpressionSubstitutor is:
 

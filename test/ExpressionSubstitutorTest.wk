@@ -1,6 +1,6 @@
 import ExpressionSubstitutor;
-import Map;
-import Asserts;
+import std.Map;
+import wunit.Asserts;
 
 @TestClass
 every ExpressionSubstitutorTest is:

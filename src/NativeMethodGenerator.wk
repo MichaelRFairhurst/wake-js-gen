@@ -1,11 +1,13 @@
-import WakeProperty;
+import treflect.WakeProperty;
 import LinkableOutput;
-import WakeLambdaType;
-import Annotation;
-import AnnotationVal;
+import treflect.WakeLambdaType;
+import treflect.Annotation;
+import treflect.AnnotationVal;
 import ExpressionSubstitutor;
-import WakeType;
-import Map;
+import treflect.WakeType;
+import treflect.WakeVarDecl;
+import treflect.ClassVarRef;
+import std.Map;
 
 every NativeMethodGenerator is:
 
@@ -14,7 +16,7 @@ every NativeMethodGenerator is:
 	provides Exception, Map{Text, Text};
 
 	generate(WakeProperty)To(LinkableOutput file, Text? jsSingletonName) {
-		var WakeType? = WakeProperty.WakeType;
+		var WakeType? = WakeProperty.WakeVarDecl.WakeType;
 
 		if WakeType exists {
 			var WakeLambdaType? = WakeType.WakeLambdaType;
@@ -38,7 +40,7 @@ every NativeMethodGenerator is:
 				var Text[] varNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 				for(var Num = 0; Num < WakeLambdaType.arguments.getSize(); Num += 1) {
-					varMap.put(WakeLambdaType.arguments[Num].getAsVariableName(), varNames[Num]);
+					varMap.put(WakeLambdaType.arguments[Num].getClassVarRef().toString(), varNames[Num]);
 				}
 
 				file.write(','.join(varMap.getValues()) + '){');

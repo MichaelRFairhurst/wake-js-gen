@@ -1,11 +1,11 @@
-import WakeClass;
-import WakeProperty;
+import treflect.WakeClass;
+import treflect.WakeProperty;
 import LinkableOutput;
-import WakeType;
-import WakeLambdaType;
-import Map;
-import Annotation;
-import AnnotationVal;
+import treflect.WakeType;
+import treflect.WakeLambdaType;
+import std.Map;
+import treflect.Annotation;
+import treflect.AnnotationVal;
 import NativeMethodGenerator;
 
 every NativeJsGenerator is:

@@ -1,5 +1,5 @@
-import File;
-import Map;
+import io.File;
+import std.Map;
 
 every LinkableOutput is:
 

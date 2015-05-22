@@ -2,7 +2,7 @@ PROGRAM := wake-js-gen
 
 # set to false or it will be linked with a main()
 EXECUTABLE := true
-MAINCLASS := yourmodule.Main
+MAINCLASS := Main
 MAINMETHOD := "main()"
 
 # Include all wake libraries by default since there aren't many just yet
