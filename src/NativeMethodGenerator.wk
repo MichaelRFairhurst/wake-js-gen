@@ -47,8 +47,8 @@ every NativeMethodGenerator is:
 
 				var Text? customJs = nothing;
 
-				foreach(WakeProperty.Annotation[]) {
-					if(Annotation.name == "CustomJavascript") {
+				foreach WakeProperty.Annotation[] {
+					if Annotation.name == "CustomJavascript" {
 						customJs = Annotation.AnnotationVal[0].Text;
 					}
 				}

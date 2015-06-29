@@ -14,14 +14,14 @@ every ExpressionSubstitutor is:
 		var Text curlyContents = '';
 
 		for(var Num = 0; Num < Text.getSize(); Num += 1) {
-			if(openFirstCurly) {
-				if(Text.charAt(Num) == '{') {
+			if openFirstCurly {
+				if Text.charAt(Num) == '{' {
 					openCurly = true;
 					openFirstCurly = false;
 					curlyContents = '';
 				}
-			} else if(openCurly) {
-				if(Text.charAt(Num) != '}') {
+			} else if openCurly {
+				if Text.charAt(Num) != '}' {
 					var Text? char = Text.charAt(Num);
 					if char exists {
 						curlyContents += char;
@@ -30,14 +30,14 @@ every ExpressionSubstitutor is:
 					openCurly = false;
 					closeFirstCurly = true;
 				}
-			} else if(closeFirstCurly) {
+			} else if closeFirstCurly {
 				closeFirstCurly = false;
-				if(Text.charAt(Num) != '}') {
+				if Text.charAt(Num) != '}' {
 					result += "{{" + curlyContents + "}";
 				} else {
 					var Bool matched = false;
-					foreach($Text in Map.getKeys()) {
-						if($Text == curlyContents) {
+					foreach $Text in Map.getKeys() {
+						if $Text == curlyContents {
 							var toReplaceWith Text? = Map.get($Text);
 							if toReplaceWith exists {
 								matched = true;
@@ -46,12 +46,12 @@ every ExpressionSubstitutor is:
 						}
 					}
 
-					if(!matched) {
+					if !matched {
 						throw Exception from this;
 					}
 				}
 			} else {
-				if(Text.charAt(Num) == '{') {
+				if Text.charAt(Num) == '{' {
 					openFirstCurly = true;
 				} else {
 					var Text? char = Text.charAt(Num);

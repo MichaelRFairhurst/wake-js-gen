@@ -16,10 +16,10 @@ every NativeJsGenerator is:
 		var Bool isJsWrapper = false;
 		var Text? jsSingletonName = nothing;
 
-		foreach(WakeClass.Annotation[]) {
-			if(Annotation.name == "JavascriptWrapper") {
+		foreach WakeClass.Annotation[] {
+			if Annotation.name == "JavascriptWrapper" {
 				isJsWrapper = true;
-			} else if(Annotation.name == "JavascriptSingleton") {
+			} else if Annotation.name == "JavascriptSingleton" {
 				jsSingletonName = Annotation.AnnotationVal[0].Text;
 			}
 		}
@@ -28,14 +28,14 @@ every NativeJsGenerator is:
 			.writeClassUsage(WakeClass.classname)
 			.write('(');
 
-		if(isJsWrapper) {
+		if isJsWrapper {
 			file.write('a');
 		}
 
 		file.write('){');
 
-		foreach(WakeClass.Annotation[]) {
-			if(Annotation.name == "JavascriptConstruct") {
+		foreach WakeClass.Annotation[] {
+			if Annotation.name == "JavascriptConstruct" {
 				var Text? ctor = Annotation.AnnotationVal[0].Text;
 				if ctor exists {
 					file.write(ctor);
@@ -43,7 +43,7 @@ every NativeJsGenerator is:
 			}
 		}
 
-		foreach(WakeClass.properties.getKeys()) {
+		foreach WakeClass.properties.getKeys() {
 			var WakeProperty? = WakeClass.properties.get(Text);
 			if WakeProperty exists {
 				NativeMethodGenerator.generate(WakeProperty)To(file, jsSingletonName);
