@@ -8,15 +8,13 @@ import NativeJsGenerator;
 import io.File;
 import io.FilePath;
 import LinkableOutput;
-import Console;
 
 every Main is:
 
-	needs Argv, TableFileReader, FileSystem, Printer, LinkableOutput, NativeJsGenerator, Console;
+	needs Argv, TableFileReader, FileSystem, Printer, LinkableOutput, NativeJsGenerator;
 
 	main() {
 		try {
-			Console.log("test!");
 			var Text tablefile = Argv.getArgv()[2];
 			var Text outputfilename = Argv.getArgv()[3];
 
