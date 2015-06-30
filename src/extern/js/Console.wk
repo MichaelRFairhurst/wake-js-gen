@@ -1,0 +1,12 @@
+import NativeJsGenerator;
+
+@JavascriptSingleton("console")
+@JavascriptConstruct("console.log('constructed');")
+every Console is:
+
+	log(Text);
+
+	log(Num);
+
+	@CustomJavascript('console.log({{Num}})')
+	text(Num);
