@@ -13,7 +13,7 @@ every NativeJsGenerator is:
 	needs NativeMethodGenerator;
 
 	createNative(WakeClass)WrapperTo(LinkableOutput file) {
-		var Bool isJsWrapper = false;
+		var isJsWrapper = false;
 		var Text? jsSingletonName = nothing;
 
 		foreach WakeClass.Annotation[] {
@@ -36,7 +36,7 @@ every NativeJsGenerator is:
 
 		foreach WakeClass.Annotation[] {
 			if Annotation.name == "JavascriptConstruct" {
-				var Text? ctor = Annotation.AnnotationVal[0].Text;
+				var ctor = Annotation.AnnotationVal[0].Text;
 				if ctor exists {
 					file.write(ctor);
 				}

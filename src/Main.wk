@@ -15,8 +15,8 @@ every Main is:
 
 	main() {
 		try {
-			var Text tablefile = Argv.getArgv()[2];
-			var Text outputfilename = Argv.getArgv()[3];
+			var tablefile = Argv.getArgv()[2];
+			var outputfilename = Argv.getArgv()[3];
 
 			var File from FileSystem.getPath(tablefile);
 			var WakeClass = TableFileReader.readFrom(File);
