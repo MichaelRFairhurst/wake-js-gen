@@ -34,13 +34,13 @@ every NativeMethodGenerator is:
 					.writePropertyUsage(WakeProperty.name)
 					.write('=function ')
 					.writePropertyUsage(WakeProperty.name)
-					.write('(');
+					.write('('s);
 
 				var Map{Text, Text} varMap from this;
-				var Text[] varNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+				var Char[] varNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 				foreach arg in WakeLambdaType.arguments at i {
-					varMap.put(arg.getClassVarRef().toString(), varNames[i]);
+					varMap.put(arg.getClassVarRef().toText(), varNames[i].toText());
 				}
 
 				file.write(','.join(varMap.getValues()) + '){');
@@ -56,7 +56,7 @@ every NativeMethodGenerator is:
 				if customJs exists {
 					file.write(ExpressionSubstitutor.substitute(varMap)Within(customJs));
 				} else {
-					var Text subject = 'a';
+					var Text subject = 'a's;
 					if jsSingletonName exists {
 						subject = jsSingletonName;
 					}

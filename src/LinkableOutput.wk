@@ -29,7 +29,7 @@ every LinkableOutput is:
 		foreach classusages.getKeys() {
 			var Text? = classusages.get(Num);
 			if Text exists {
-				File.write(Num.toString() + " %" + Text + "% ");
+				File.write(Num.toText() + " %" + Text + "% ");
 			}
 		}
 
@@ -37,7 +37,7 @@ every LinkableOutput is:
 		foreach propertyusages.getKeys() {
 			var Text? = propertyusages.get(Num);
 			if Text exists {
-				File.write(Num.toString() + " %" + Text + "% ");
+				File.write(Num.toText() + " %" + Text + "% ");
 			}
 		}
 
