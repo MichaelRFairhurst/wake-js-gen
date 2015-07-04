@@ -26,10 +26,10 @@ every NativeJsGenerator is:
 
 		file.write('function ')
 			.writeClassUsage(WakeClass.classname)
-			.write('(');
+			.write('('s);
 
 		if isJsWrapper {
-			file.write('a');
+			file.write('a's);
 		}
 
 		file.write('){');
@@ -50,5 +50,5 @@ every NativeJsGenerator is:
 			}
 		}
 
-		file.write("}");
+		file.write("}"s);
 	}
