@@ -14,6 +14,12 @@ every LinkableOutput is:
 		return this;
 	}
 
+	LinkableOutput -- write(Char) {
+		offset += 1;
+		buffer += Char;
+		return this;
+	}
+
 	LinkableOutput -- writeClassUsage(Text) {
 		classusages.put(offset, Text);
 		return this;
