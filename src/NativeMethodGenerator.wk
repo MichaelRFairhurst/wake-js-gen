@@ -25,7 +25,7 @@ every NativeMethodGenerator is:
 
 				var Text nativeName = WakeProperty.casing[0];
 
-				var Num? placement = nativeName.indexOf('(');
+				var Int? placement = nativeName.indexOf('(');
 				if placement exists {
 					nativeName = nativeName.substr(0, placement);
 				}

@@ -13,16 +13,16 @@ every ExpressionSubstitutor is:
 		var Text result = '';
 		var Text curlyContents = '';
 
-		for(var Num = 0; Num < Text.getSize(); Num += 1) {
+		for(var Int = 0; Int < Text.getSize(); Int += 1) {
 			if openFirstCurly {
-				if Text.charAt(Num) == '{' {
+				if Text.charAt(Int) == '{' {
 					openCurly = true;
 					openFirstCurly = false;
 					curlyContents = '';
 				}
 			} else if openCurly {
-				if Text.charAt(Num) != '}' {
-					var Char? = Text.charAt(Num);
+				if Text.charAt(Int) != '}' {
+					var Char? = Text.charAt(Int);
 					if Char exists {
 						curlyContents += Char;
 					}
@@ -32,7 +32,7 @@ every ExpressionSubstitutor is:
 				}
 			} else if closeFirstCurly {
 				closeFirstCurly = false;
-				if Text.charAt(Num) != '}' {
+				if Text.charAt(Int) != '}' {
 					result += "{{" + curlyContents + "}";
 				} else {
 					var Bool matched = false;
@@ -51,10 +51,10 @@ every ExpressionSubstitutor is:
 					}
 				}
 			} else {
-				if Text.charAt(Num) == '{' {
+				if Text.charAt(Int) == '{' {
 					openFirstCurly = true;
 				} else {
-					var Char? = Text.charAt(Num);
+					var Char? = Text.charAt(Int);
 					if Char exists {
 						result += Char;
 					}
